@@ -1,0 +1,36 @@
+{
+  "sit_version": "1.0",
+  
+  "intent": {
+    "action": "READ",
+    "target": "user profile summary for dashboard display",
+    "purpose": "Display personalized greeting on user homepage"
+  },
+  
+  "scope": {
+    "data_types_allowed": ["display_name", "avatar_url", "preferences"],
+    "data_types_denied": ["credentials", "api_keys", "pii", "financial", "health"],
+    "entity_scope": ["self"]
+  },
+  
+  "requester": {
+    "id": "agent_dashboard_v1",
+    "role": "agent",
+    "clearance_level": 3,
+    "session_fingerprint": "a1b2c3d4e5f6"
+  },
+  
+  "constraints": {
+    "max_tokens": 500,
+    "allowed_operations": ["READ"],
+    "output_format": "json",
+    "timeout_ms": 5000
+  },
+  
+  "metadata": {
+    "request_id": "550e8400-e29b-41d4-a716-446655440000",
+    "timestamp": "2025-12-29T12:00:00+08:00",
+    "source_system": "web_dashboard",
+    "chain": []
+  }
+}

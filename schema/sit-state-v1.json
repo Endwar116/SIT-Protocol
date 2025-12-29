@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Endwar116/SIT-Protocol/schema/sit-state-v1.json",
+  "title": "SIT State v1.0",
+  "description": "Semantic Isolation Transfer - Intent serialization format for AI-native security",
+  "type": "object",
+  "required": ["sit_version", "intent", "scope", "requester", "constraints", "metadata"],
+  
+  "properties": {
+    "sit_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Protocol version for backward compatibility"
+    },
+    
+    "intent": {
+      "type": "object",
+      "required": ["action", "target", "purpose"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["READ", "WRITE", "DELETE", "QUERY", "SUMMARIZE", "TRANSFORM", "VALIDATE"],
+          "description": "What operation is requested"
+        },
+        "target": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "What resource is being accessed (semantic description, NOT path/SQL)"
+        },
+        "purpose": {
+          "type": "string",
+          "maxLength": 512,
+          "description": "Why this action is needed (business justification)"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "scope": {
+      "type": "object",
+      "required": ["data_types_allowed"],
+      "properties": {
+        "data_types_allowed": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Categories of data that CAN be accessed"
+        },
+        "data_types_denied": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["credentials", "api_keys", "pii", "financial", "health"],
+          "description": "Categories of data that CANNOT be accessed"
+        },
+        "time_range": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        },
+        "entity_scope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Which entities (users/orgs/projects) this request applies to"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "requester": {
+      "type": "object",
+      "required": ["id", "role", "clearance_level"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+          "description": "Unique requester identifier (sanitized)"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "agent", "admin", "system", "auditor"],
+          "description": "Permission role"
+        },
+        "clearance_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Security clearance (1=lowest, 10=highest)"
+        },
+        "session_fingerprint": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Hash of session context for tracing (NOT the session token itself)"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000,
+          "default": 4096,
+          "description": "Maximum response size"
+        },
+        "allowed_operations": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["READ", "WRITE", "DELETE"] },
+          "default": ["READ"]
+        },
+        "output_format": {
+          "type": "string",
+          "enum": ["json", "text", "markdown", "structured"],
+          "default": "json"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000,
+          "default": 30000
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "metadata": {
+      "type": "object",
+      "required": ["request_id", "timestamp", "source_system"],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique request identifier for audit trail"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_system": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Origin system identifier"
+        },
+        "chain": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer": { "type": "string" },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "hash": { "type": "string" }
+            }
+          },
+          "description": "Audit chain of SIT State transformations"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  
+  "additionalProperties": false,
+  
+  "$defs": {
+    "forbidden_patterns": {
+      "description": "Patterns that MUST NOT appear in any string field",
+      "patterns": [
+        "SELECT.*FROM",
+        "INSERT.*INTO",
+        "UPDATE.*SET",
+        "DELETE.*FROM",
+        "DROP.*TABLE",
+        "UNION.*SELECT",
+        "OR.*=.*",
+        "AND.*=.*",
+        "--",
+        ";.*--",
+        "/etc/passwd",
+        "../",
+        "0x[0-9a-fA-F]+",
+        "\\x[0-9a-fA-F]{2}",
+        "<script",
+        "javascript:",
+        "data:text/html",
+        "{{.*}}",
+        "\\$\\{.*\\}"
+      ]
+    }
+  }
+}

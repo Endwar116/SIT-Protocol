@@ -1,0 +1,63 @@
+{
+  "policy_version": "1.0",
+  "policy_id": "default_security",
+  "name": "Default Security Policy",
+  "description": "Baseline security rules for SIT Protocol. Deny by default, allow specific safe operations.",
+  
+  "rules": [
+    {
+      "rule_id": "block_write_low_clearance",
+      "priority": 10,
+      "conditions": {
+        "match_all": [
+          { "field": "intent.action", "operator": "in", "value": ["WRITE", "DELETE"] },
+          { "field": "requester.clearance_level", "operator": "lt", "value": 7 }
+        ]
+      },
+      "action": "DENY",
+      "log_level": "WARN"
+    },
+    
+    {
+      "rule_id": "allow_read_agents",
+      "priority": 50,
+      "conditions": {
+        "match_all": [
+          { "field": "intent.action", "operator": "eq", "value": "READ" },
+          { "field": "requester.role", "operator": "in", "value": ["agent", "user", "admin"] }
+        ]
+      },
+      "action": "ALLOW",
+      "log_level": "INFO"
+    },
+    
+    {
+      "rule_id": "allow_admin_all",
+      "priority": 100,
+      "conditions": {
+        "match_all": [
+          { "field": "requester.role", "operator": "eq", "value": "admin" },
+          { "field": "requester.clearance_level", "operator": "gte", "value": 8 }
+        ]
+      },
+      "action": "ALLOW",
+      "log_level": "INFO"
+    },
+    
+    {
+      "rule_id": "escalate_sensitive_scope",
+      "priority": 20,
+      "conditions": {
+        "match_any": [
+          { "field": "scope.data_types_allowed", "operator": "contains", "value": "financial" },
+          { "field": "scope.data_types_allowed", "operator": "contains", "value": "health" },
+          { "field": "scope.data_types_allowed", "operator": "contains", "value": "pii" }
+        ]
+      },
+      "action": "ESCALATE",
+      "log_level": "CRITICAL"
+    }
+  ],
+  
+  "default_action": "DENY"
+}
