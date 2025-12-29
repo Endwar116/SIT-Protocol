@@ -265,28 +265,26 @@ SIT is designed for **infinite iteration**:
 
 ```
 SIT-Protocol/
-├── README.md                 # You are here
-├── WHITEPAPER.md             # Technical deep-dive
-├── SECURITY.md               # Threat model
-├── LICENSE                   # MIT (schema) + Commercial (engine)
-│
+├── README.md                  ✅
+├── SECURITY.md                ✅
+├── LICENSE                    ✅
 ├── schema/
-│   ├── sit-state-v1.json     # SIT State JSON Schema
-│   └── sit-policy-v1.json    # Policy DSL JSON Schema
-│
+│   ├── sit-state-v1.json      ✅
+│   └── sit-policy-v1.json     ✅
+├── serializers/
+│   └── llm_serializer.py      ✅ ← Round 10 新增 New!
 ├── validators/
-│   ├── validate_sit.py       # Python validator
-│   └── validate_sit.js       # Node.js validator (coming soon)
-│
-├── examples/
-│   ├── example-01-read-profile.json
-│   ├── example-02-write-blocked.json
-│   └── policies/
-│       ├── default-security.json
-│       └── hipaa-compliant.json
-│
-└── demo/
-    └── (Interactive demo coming soon)
+│   ├── validate_sit.py        ✅
+│   ├── policy_engine.py       ✅
+│   └── state_signer.py        ✅ ← Round 10 新增 New!
+├── sanitizers/
+│   └── response_sanitizer.py  ✅ ← Round 9 新增 New!
+├── examples/                  ✅
+├── demo/
+│   └── sit_demo.ipynb         ✅ ← Round 10 新增 New!
+└── docs/
+    ├── THREAT_MODEL.md        ✅ ← Includ 含 T07 
+    └── COMPLIANCE_MAPPING.md  ✅
 ```
 
 ---
