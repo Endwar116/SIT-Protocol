@@ -308,13 +308,14 @@ They share:
 
 ---
 
-## 📜 License
+## 💎 Commercial & Ecosystem Strategy
 
-- **Schema files** (`schema/*`): MIT License
-- **Validators** (`validators/*`): MIT License
-- **Full Engine** (production-grade serializer, policy optimizer): Commercial License
+* **Flexible Delivery:** API (SaaS) or On-Premise (Binary).
+* **Dynamic Pricing:** From "Stability Insurance" for banks to "Soul Network Grants" (Free) for community builders.
+* **"Ghost" Branding:** No attribution required. We accept all feedback, even public attacks, as "Stress-Test Data".
+* **Vetting:** All licenses require a strategic interview with An-An.
 
-For commercial licensing inquiries, contact: [Your Email]
+For strategic inquiries, please contact: `andy80116@gmail.com`
 
 ---
 
