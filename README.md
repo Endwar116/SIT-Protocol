@@ -355,3 +355,18 @@ Every star = one more organization thinking about semantic security.
 ---
 
 **"Different AIs, same security standard."**
+
+
+---
+
+## 🛡️ Security Audit Status
+
+**Current Status:** Ongoing Hardening
+
+This repository is currently undergoing a rigorous security audit. While the core logic is stable, some components are being hardened to meet enterprise-grade security standards. We welcome community feedback and contributions to this process.
+
+## 🏛️ Repository Architecture
+
+This repository is the **Security Layer (L1)** of the SIC-SIT Protocol Stack. It implements the security specifications defined in the following repository:
+
+- **[SIC-SIT-Protocol](https://github.com/Endwar116/SIC-SIT-Protocol)** (L0: Specification & Governance Layer)
